@@ -1,5 +1,7 @@
 from django.db import models
+
 from accounts.models import User
+from django.utils import timezone
 
 class Student(models.Model):
     STATUS_CHOICES = (
@@ -8,27 +10,56 @@ class Student(models.Model):
         ("suspended", "Suspended"),
     )
 
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    GENDER_CHOICES = (
+        ("M", "Male"),
+        ("F", "Female"),
+    )
+
+    PARENTAL_EDUCATION_CHOICES = (
+        ("primary", "Primary School"),
+        ("secondary", "Secondary School"),
+        ("bachelor", "Bachelor"),
+        ("master", "Master"),
+        ("doctorate", "Doctorate"),
+    )
+
+    user = models.OneToOneField(
+        User,
+        on_delete=models.CASCADE,
+        related_name="student_profile",
+    )
 
     student_id = models.AutoField(primary_key=True)
 
-    date_of_birth = models.DateField()
+    age = models.PositiveSmallIntegerField()
 
     gender = models.CharField(
         max_length=1,
-        choices=(
-            ("M", "Male"),
-            ("F", "Female"),
-        ),
+        choices=GENDER_CHOICES,
     )
 
-    attendance_percentage = models.DecimalField(max_digits=5, decimal_places=2, default = 0)
+    class_name = models.CharField(max_length=30)
 
-    study_hours_per_week = models.DecimalField(max_digits=4, decimal_places=1, default=0)
+    study_hours_per_day = models.DecimalField(
+        max_digits=4,
+        decimal_places=2,
+        default=0,
+    )
 
-    previous_gpa = models.DecimalField(max_digits=3, decimal_places=2, default=0)
+    attendance_percentage = models.DecimalField(
+        max_digits=5,
+        decimal_places=2,
+        default=0,
+    )
 
-    current_grade = models.DecimalField(max_digits=5, decimal_places=2, default=0)
+    parental_education = models.CharField(
+        max_length=20,
+        choices=PARENTAL_EDUCATION_CHOICES,
+    )
+
+    internet_access = models.BooleanField(default=True)
+
+    extracurricular_activities = models.BooleanField(default=False)
 
     status = models.CharField(
         max_length=15,
@@ -39,6 +70,7 @@ class Student(models.Model):
     def __str__(self):
         return self.user.get_full_name() or self.user.username
 
+
 class AcademicRecord(models.Model):
     student = models.ForeignKey(
         Student,
@@ -46,22 +78,40 @@ class AcademicRecord(models.Model):
         related_name="academic_records",
     )
 
-    semester = models.PositiveSmallIntegerField()
+    math_score = models.DecimalField(
+        max_digits=5,
+        decimal_places=2,
+    )
 
-    homework_average = models.DecimalField(max_digits=5, decimal_places=2)
+    science_score = models.DecimalField(
+        max_digits=5,
+        decimal_places=2,
+    )
 
-    quiz_average = models.DecimalField(max_digits=5, decimal_places=2)
+    english_score = models.DecimalField(
+        max_digits=5,
+        decimal_places=2,
+    )
 
-    midterm_score = models.DecimalField(max_digits=5, decimal_places=2)
+    previous_year_score = models.DecimalField(
+        max_digits=5,
+        decimal_places=2,
+    )
 
-    final_exam_score = models.DecimalField(max_digits=5, decimal_places=2)
+    final_percentage = models.DecimalField(
+        max_digits=5,
+        decimal_places=2,
+    )
 
-    final_grade = models.DecimalField(max_digits=5, decimal_places=2)
-
+    performance_level = models.CharField(
+        max_length=20,
+        default="Unknown",
+    )
     passed = models.BooleanField()
 
     def __str__(self):
-        return f"{self.student} - Semester {self.semester}"
+        return f"{self.student} Academic Record"
+
 
 class Prediction(models.Model):
     student = models.ForeignKey(
@@ -70,13 +120,24 @@ class Prediction(models.Model):
         related_name="predictions",
     )
 
-    predicted_grade = models.DecimalField(max_digits=5, decimal_places=2)
+    predicted_final_percentage = models.DecimalField(
+        max_digits=5,
+        decimal_places=2,
+    )
+
+    predicted_performance_level = models.CharField(
+        max_length=20,
+        default="Unknown",
+    )
 
     predicted_pass = models.BooleanField()
 
-    confidence = models.DecimalField(max_digits=5, decimal_places=2)
+    confidence = models.DecimalField(
+        max_digits=5,
+        decimal_places=2,
+    )
 
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.student} - {self.created_at.date()}"
+        return f"{self.student} Prediction ({self.created_at.date()})"
