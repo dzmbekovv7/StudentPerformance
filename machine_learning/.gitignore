@@ -1,0 +1,96 @@
+# =========================
+# 🐍 Python
+# =========================
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.log
+
+# Virtual environments
+venv/
+env/
+ENV/
+.venv/
+
+# =========================
+# 🧠 ML Models (VERY IMPORTANT)
+# =========================
+*.pkl
+*.joblib
+*.h5
+*.pt
+*.onnx
+
+# trained models folder (if you use it)
+models/
+model/
+saved_models/
+
+# =========================
+# 📊 Data files (optional but recommended)
+# =========================
+*.csv
+*.xlsx
+*.parquet
+data/
+datasets/
+
+# keep only structure if needed
+!data/.gitkeep
+!datasets/.gitkeep
+
+# =========================
+# 📓 Jupyter Notebook
+# =========================
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# optional: if you don't want notebooks in git at all
+# *.ipynb
+
+# =========================
+# 🧪 Django
+# =========================
+*.sqlite3
+db.sqlite3
+
+media/
+staticfiles/
+
+# Django secrets
+.env
+.env.*
+*.env
+
+# migrations (ONLY if you regenerate them manually)
+# */migrations/*.py
+# !*/migrations/__init__.py
+
+# =========================
+# IDE / Editor
+# =========================
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# =========================
+# OS files
+# =========================
+.DS_Store
+Thumbs.db
+
+# =========================
+# ML experiment outputs
+# =========================
+runs/
+wandb/
+mlruns/
+experiments/
+
+# =========================
+# temporary files
+# =========================
+*.tmp
+*.bak
