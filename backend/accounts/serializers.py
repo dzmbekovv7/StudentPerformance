@@ -10,27 +10,27 @@ class RegisterSerializer(serializers.ModelSerializer):
         fields = ('username', 'email', 'password', 'first_name', 'last_name')
         extra_kwargs = {'password': {'write_only': True}}
 
-        @transaction.atomic
-        def create(self, validated_data):
-            password = validated_data.pop('password')
+    @transaction.atomic
+    def create(self, validated_data):
+        password = validated_data.pop('password')
 
-            user = User.objects.create_user(
-                password=password,
-                role="student",
-                **validated_data
-            )
-            Student.objects.create(user=user)
-            return user
+        user = User.objects.create_user(
+            password=password,
+            role="student",
+            **validated_data
+        )
+        Student.objects.create(user=user)
+        return user
 
-        def validate_email(self, value):
-            if User.objects.filter(email=value).exists():
-                raise serializers.ValidationError("This email is already registered.")
-            return value
+    def validate_email(self, value):
+        if User.objects.filter(email=value).exists():
+            raise serializers.ValidationError("This email is already registered.")
+        return value
 
-        def validate_password(self, value):
-            if value < 8:
-                raise serializers.ValidationError("Password must be at least 8 characters.")
-            return value
+    def validate_password(self, value):
+        if value < 8:
+            raise serializers.ValidationError("Password must be at least 8 characters.")
+        return value
 
 class LoginSerializer(serializers.Serializer):
     username = serializers.CharField()

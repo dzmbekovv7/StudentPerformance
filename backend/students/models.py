@@ -112,32 +112,17 @@ class AcademicRecord(models.Model):
     def __str__(self):
         return f"{self.student} Academic Record"
 
-
 class Prediction(models.Model):
-    student = models.ForeignKey(
-        Student,
-        on_delete=models.CASCADE,
-        related_name="predictions",
-    )
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    teacher = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name = "predictions_made")
+    input_data = models.JSONField()
 
-    predicted_final_percentage = models.DecimalField(
-        max_digits=5,
-        decimal_places=2,
-    )
+    predicted_final_percentage = models.FloatField(null=True, blank=True)
 
-    predicted_performance_level = models.CharField(
-        max_length=20,
-        default="Unknown",
-    )
-
-    predicted_pass = models.BooleanField()
-
-    confidence = models.DecimalField(
-        max_digits=5,
-        decimal_places=2,
-    )
+    passed = models.BooleanField(null=True, blank=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.student} Prediction ({self.created_at.date()})"
+        return f"{self.student} - {self.predicted_final_percentage}"
+

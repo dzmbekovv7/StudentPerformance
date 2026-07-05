@@ -3,7 +3,9 @@ from django.urls import path, include
 from .views import (
     AcademicRecordViewSet,
     StudentViewSet,
-    PredictFinalScoreAPIView
+    PredictFinalScoreAPIView,
+    PredictPassAPIView,
+    TeacherDashboardAPIView
 )
 
 router = DefaultRouter()
@@ -16,8 +18,20 @@ urlpatterns = [
     path("", include(router.urls)),  # 👈 ViewSets go here
 
     path(
-        "predict/final-score/",
+        "predict/<int:id>/final-score/",
         PredictFinalScoreAPIView.as_view(),
         name="predict-final-score"
     ),
+
+    path(
+        "predict/<int:id>/pass/",
+        PredictPassAPIView.as_view(),
+        name="predict-pass"
+    ),
+
+    path(
+        "dashboard/",
+        TeacherDashboardAPIView.as_view(),
+        name="teacher-dashboard"
+    )
 ]
