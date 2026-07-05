@@ -9,8 +9,8 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 import numpy as np
 
-predict_final_percentage_model = joblib.load("../machine_learning/models/final_percentage_prediction.pkl")
-predict_pass_model = joblib.load("../machine_learning/models/pass_prediction.pkl")
+predict_final_percentage_model = joblib.load("machine_learning/models/final_percentage_prediction.pkl")
+predict_pass_model = joblib.load("machine_learning/models/pass_prediction.pkl")
 
 class PredictFinalScoreAPIView(APIView):
     permission_classes = [IsAuthenticated, IsTeacher]
